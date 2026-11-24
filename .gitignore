@@ -1,0 +1,14 @@
+# Службові файли систем
+Thumbs.db
+desktop.ini
+.DS_Store
+._*
+
+# Тимчасові файли Photoshop / Illustrator
+*.tmp
+~*
+*.psd~
+*.lck
+
+# Особисті експерименти (не для команди)
+_my/

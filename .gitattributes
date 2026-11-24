@@ -1,0 +1,8 @@
+# Дизайн-файли — бінарні: git не намагається їх «зливати» по рядках
+*.psd binary
+*.psb binary
+*.ai binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
