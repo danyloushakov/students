@@ -3,20 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Team poster</title>
+  <title>Наша команда — New Era</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <p class="eyebrow">New Era · команда</p>
     <h1>Наша команда</h1>
+    <p class="meta" id="meta"></p>
   </header>
 
-  <!-- Кожен учасник: одна картинка з master-assets. Назви мають збігатися з назвами шарів у MASTER.psd. -->
-  <main class="grid">
-    <figure><img src="master-assets/anna.png" alt="Робота Ані"><figcaption>Аня</figcaption></figure>
-    <figure><img src="master-assets/bohdan.png" alt="Робота Богдана"><figcaption>Богдан</figcaption></figure>
-    <figure><img src="master-assets/vika.png" alt="Робота Віки"><figcaption>Віка</figcaption></figure>
-  </main>
+  <!-- Галерея будується сама зі списку картинок у master-assets (assets.json дає сайт New Era).
+       Нову роботу не треба вписувати: Photoshop згенерував PNG → push → вона з'явиться тут. -->
+  <main class="grid" id="grid"></main>
+  <p class="empty" id="empty" hidden>
+    Картинок ще немає. У MASTER.psd допиши до назв шарів <b>.png</b>, увімкни
+    <b>File → Generate → Image Assets</b> і запуш теку master-assets.
+  </p>
+
+  <script>
+    fetch('assets.json', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var grid = document.getElementById('grid');
+        var items = data.items || [];
+        document.getElementById('empty').hidden = items.length > 0;
+        document.getElementById('meta').textContent = items.length ? 'Робіт: ' + items.length : '';
+        items.forEach(function (it) {
+          var fig = document.createElement('figure');
+          var img = document.createElement('img');
+          img.src = it.src;
+          img.alt = it.name;
+          img.loading = 'lazy';
+          var cap = document.createElement('figcaption');
+          cap.textContent = it.name;
+          fig.appendChild(img);
+          fig.appendChild(cap);
+          grid.appendChild(fig);
+        });
+      })
+      .catch(function () {
+        document.getElementById('empty').hidden = false;
+      });
+  </script>
 </body>
 </html>
