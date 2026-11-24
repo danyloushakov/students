@@ -3,48 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Наша команда — New Era</title>
+  <title>New Era — спільний арт</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <p class="eyebrow">New Era · команда</p>
-    <h1>Наша команда</h1>
-    <p class="meta" id="meta"></p>
-  </header>
-
-  <!-- Галерея будується сама зі списку картинок у master-assets (assets.json дає сайт New Era).
-       Нову роботу не треба вписувати: Photoshop згенерував PNG → push → вона з'явиться тут. -->
-  <main class="grid" id="grid"></main>
-  <p class="empty" id="empty" hidden>
-    Картинок ще немає. У MASTER.psd допиши до назв шарів <b>.png</b>, увімкни
-    <b>File → Generate → Image Assets</b> і запуш теку master-assets.
-  </p>
+  <!-- Загальний арт 1920×1080: шари учнів один над одним у порядку з MASTER.psd (master-assets/layers.json). -->
+  <div class="stage" id="stage"></div>
 
   <script>
-    fetch('assets.json', { cache: 'no-store' })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var grid = document.getElementById('grid');
-        var items = data.items || [];
-        document.getElementById('empty').hidden = items.length > 0;
-        document.getElementById('meta').textContent = items.length ? 'Робіт: ' + items.length : '';
-        items.forEach(function (it) {
-          var fig = document.createElement('figure');
-          var img = document.createElement('img');
-          img.src = it.src;
-          img.alt = it.name;
-          img.loading = 'lazy';
-          var cap = document.createElement('figcaption');
-          cap.textContent = it.name;
-          fig.appendChild(img);
-          fig.appendChild(cap);
-          grid.appendChild(fig);
-        });
-      })
-      .catch(function () {
-        document.getElementById('empty').hidden = false;
+    var stage = document.getElementById('stage');
+    function fit() {
+      var k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      stage.style.transform = 'translate(-50%, -50%) scale(' + k + ')';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+
+    Promise.all([
+      fetch('master-assets/layers.json', { cache: 'no-store' }).then(function (r) { return r.json(); }),
+      fetch('assets.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).catch(function () { return { items: [] }; })
+    ]).then(function (res) {
+      var order = res[0].layers || [];
+      var version = {};
+      (res[1].items || []).forEach(function (it) { version[it.name] = it.src; });
+      order.forEach(function (name) {
+        var img = document.createElement('img');
+        img.src = version[name] || ('master-assets/' + name + '.png');
+        img.alt = '';
+        stage.appendChild(img);
       });
+    });
   </script>
 </body>
 </html>
