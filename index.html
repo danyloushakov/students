@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Загальний арт 1920×1080: шари учнів один над одним у порядку з MASTER.psd (master-assets/layers.json). -->
+  <!-- Загальний арт 1920×1080: прев'ю MASTER.psd одним файлом (master-assets/MASTER.png, робить tools/export-art.jsx). -->
   <div class="stage" id="stage"></div>
 
   <script>
@@ -19,20 +19,31 @@
     window.addEventListener('resize', fit);
     fit();
 
-    Promise.all([
-      fetch('master-assets/layers.json', { cache: 'no-store' }).then(function (r) { return r.json(); }),
-      fetch('assets.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).catch(function () { return { items: [] }; })
-    ]).then(function (res) {
-      var order = res[0].layers || [];
-      var version = {};
-      (res[1].items || []).forEach(function (it) { version[it.name] = it.src; });
-      order.forEach(function (name) {
-        var img = document.createElement('img');
-        img.src = version[name] || ('master-assets/' + name + '.png');
-        img.alt = '';
+    // Один загальний ассет: master-assets/MASTER.png (його оновлює tools/auto-master.cmd).
+    // Кожні 15 с перевіряємо версію; нова картинка спершу вантажиться, потім м'яко підміняє стару.
+    var current = '';
+    function show(src) {
+      if (src === current) return;
+      current = src;
+      var img = new Image();
+      img.alt = '';
+      img.onload = function () {
         stage.appendChild(img);
-      });
-    });
+        requestAnimationFrame(function () { img.style.opacity = 1; });
+        setTimeout(function () { while (stage.children.length > 1) stage.removeChild(stage.firstChild); }, 700);
+      };
+      img.src = src;
+    }
+    function check() {
+      fetch('assets.json', { cache: 'no-store' })
+        .then(function (r) { return r.json(); })
+        .then(function (a) {
+          (a.items || []).forEach(function (it) { if (it.name === 'MASTER') show(it.src); });
+        })
+        .catch(function () { show('master-assets/MASTER.png'); });
+    }
+    check();
+    setInterval(check, 15000);
   </script>
 </body>
 </html>

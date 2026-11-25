@@ -5,7 +5,8 @@
  *
  * 1. Оновлює всі змінені Linked Smart Objects (Update All Modified Content).
  * 2. Кожен шар зберігає як PNG на ВЕСЬ холст 1920×1080 (прозорий фон) — так позиція шару не губиться.
- * 3. Пише master-assets/layers.json — порядок шарів знизу вгору. Сторінка команди складає з них арт.
+ * 3. Пише master-assets/layers.json — порядок шарів знизу вгору.
+ *    І master-assets/MASTER.png — прев'ю всього MASTER, його показує сторінка «Результат команди».
  * 4. Зберігає MASTER.psd. Далі: Sourcetree → Stage All → Commit → Push.
  */
 app.displayDialogs = DialogModes.NO;
@@ -39,6 +40,9 @@ app.preferences.rulerUnits = Units.PIXELS;
     order.push(name);
   }
   app.activeDocument = master;
+
+  // Прев'ю всього MASTER одним файлом — його показує сторінка «Результат команди».
+  master.saveAs(new File(outDir + "/MASTER.png"), png, true, Extension.LOWERCASE);
 
   var json = '{\n  "width": ' + W + ',\n  "height": ' + H + ',\n  "layers": [\n';
   for (var k = 0; k < order.length; k++) json += '    "' + order[k] + '"' + (k < order.length - 1 ? ",\n" : "\n");
