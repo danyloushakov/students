@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Music Generator</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header><div class="brand"><div class="logo">♫</div><div><h1>Music Generator</h1><p>Твоя музика. Твої правила.</p></div></div><span class="version">MVP · 0.1</span></header>
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">PROCEDURAL MUSIC STUDIO</p><h2>Створи свій грув.</h2><p class="sub">Генеруй живі ритми, басові лінії та мелодичні партії. Кожен запуск — нова композиція.</p></div>
+      <div class="disc"><div class="disc-inner">♫</div></div>
+    </section>
+    <section class="panel controls">
+      <div class="section-head"><div><p class="eyebrow">01 / GENERATOR</p><h3>Налаштування композиції</h3></div><button id="randomize" class="quiet">↻ Випадкові налаштування</button></div>
+      <div class="grid">
+        <label>Стиль<select id="style"><option value="acoustic">Acoustic Jam</option><option value="world">World Percussion</option><option value="funk">Funk Groove</option><option value="latin">Latin Pulse</option><option value="ambient">Ambient</option><option value="rock">Indie Rock</option><option value="electronic">Electronic</option></select></label>
+        <label>Темп <span class="value" id="tempoVal">98 BPM</span><input id="tempo" type="range" min="55" max="160" value="98"></label>
+        <label>Тривалість<select id="bars"><option value="4">4 такти · короткий ескіз</option><option value="8" selected>8 тактів · демо</option><option value="16">16 тактів · повна фраза</option><option value="32">32 такти · довга композиція</option></select></label>
+        <label>Насиченість <span class="value" id="densityVal">65%</span><input id="density" type="range" min="10" max="100" value="65"></label>
+        <label>Тональність<select id="key"><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>A</option><option>B</option><option selected>Am</option><option>Dm</option><option>Em</option><option>Gm</option></select></label>
+        <label>Варіативність <span class="value" id="variationVal">55%</span><input id="variation" type="range" min="0" max="100" value="55"></label>
+      </div>
+      <div class="actions"><button id="generate" class="primary">✦ Generate music</button><button id="play" class="secondary" disabled>▶ Прослухати</button><button id="stop" class="secondary" disabled>■ Стоп</button></div>
+      <p id="status" class="status">Налаштуй параметри та натисни Generate music.</p>
+    </section>
+    <section class="panel">
+      <div class="section-head"><div><p class="eyebrow">02 / ARRANGEMENT</p><h3>Інструменти</h3></div><span class="muted">Увімкнення доріжок</span></div>
+      <div class="tracks">
+        <label class="track"><span class="track-icon">🥁</span><span><b>Перкусія</b><small>Kick · Snare · Shaker</small></span><input type="checkbox" id="drums" checked></label>
+        <label class="track"><span class="track-icon">🪘</span><span><b>Етнічні барабани</b><small>Djembe · Hand drum</small></span><input type="checkbox" id="hand" checked></label>
+        <label class="track"><span class="track-icon">🎸</span><span><b>Гітара</b><small>Акустичний pluck / strum</small></span><input type="checkbox" id="guitar" checked></label>
+        <label class="track"><span class="track-icon">🎸</span><span><b>Бас</b><small>Finger-style synth bass</small></span><input type="checkbox" id="bass" checked></label>
+        <label class="track"><span class="track-icon">✨</span><span><b>Мелодія / атмосфера</b><small>Keys · Pad</small></span><input type="checkbox" id="melody"></label>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="section-head"><div><p class="eyebrow">03 / EXPORT</p><h3>Збереження</h3></div></div>
+      <div class="export-row"><div><b>WAV audio</b><small>Готова композиція у високій якості</small></div><button id="wav" class="secondary" disabled>↓ Export WAV</button></div>
+      <div class="export-row"><div><b>MIDI arrangement</b><small>Нотні події для DAW та редагування</small></div><button id="midi" class="secondary" disabled>↓ Export MIDI</button></div>
+    </section>
+    <footer>Music Generator · локальний прототип. Аудіо генерується у браузері, без завантаження на сервер.</footer>
+  </main>
+</div>
+<script src="app.js"></script>
+</body></html>
